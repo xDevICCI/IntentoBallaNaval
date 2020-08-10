@@ -98,7 +98,7 @@ func obtener_coordenada(){
 	var coor int
 
 	//usuario ingresará las coordenadas por teclado - INPUT CONSOLE
-	for ok := true; ok; ok = res > 0 {
+	for ok := true; ok; ok = res > 0 { //while(true)
 
 		//aca debe recibir
 		fmt.Println("Introduzca las coordenadas (x,y)")
@@ -310,9 +310,13 @@ func verif_ganador(tablero string) bool {
 
 func main() {	
 
-	x, err := strconv.Atoi(os.Args[1])
-	y, err1 := strconv.Atoi(os.Args[2])
-	barcos, err2 := strconv.Atoi(os.Args[3])
-	intbarco , err3 := strconv.Atoi(os.Args[4])
+	cant_jugadores, err := strconv.Atoi(os.Args[1])
+
+	cant_barcos, err2 := strconv.Atoi(os.Args[2])
+
+	x, err := strconv.Atoi(os.Args[3])
+	y, err1 := strconv.Atoi(os.Args[4])
+
+	
 
 }
