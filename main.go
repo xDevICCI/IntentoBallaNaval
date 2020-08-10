@@ -10,22 +10,15 @@ import "log"
 import "os"
 
 
- 
 
 type Block struct {
-
     Try     func()
-
     Catch   func(Exception)
-
     Finally func()
-
 }
 
  
-
 type Exception interface{}
-
  
 
 func Throw(up Exception) {
@@ -35,33 +28,20 @@ func Throw(up Exception) {
 }
 
  
-
 func (tcf Block) Do() {
 
     if tcf.Finally != nil {
-
- 
-
         defer tcf.Finally()
 
     }
-
     if tcf.Catch != nil {
-
         defer func() {
-
             if r := recover(); r != nil {
-
                 tcf.Catch(r)
-
             }
-
         }()
-
     }
-
     tcf.Try()
-
 }
 
 func usuario_lugar_barcos(tablero string, barcos int) string{
@@ -127,7 +107,7 @@ func obtener_coordenada(){
 
 			Try: func() {
 
-				coor := entrada_usuario.Split("", ",") 
+				coor := entrada_usuario.Split(" ", ",") 
 
 				if len(coor) != 2{
 					fmt.Println("Enrada Inválida, muy pocas / muchas coordenadas")
@@ -327,6 +307,6 @@ func verif_ganador(tablero string) bool {
 	}
 }
 
-func main() {
-    //..
+func main() {	
 }
+
