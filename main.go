@@ -308,5 +308,11 @@ func verif_ganador(tablero string) bool {
 }
 
 func main() {	
+
+	x, err := strconv.Atoi(os.Args[1])
+	y, err1 := strconv.Atoi(os.Args[2])
+	barcos, err2 := strconv.Atoi(os.Args[3])
+	intbarco , err3 := strconv.Atoi(os.Args[4])
+
 }
 
