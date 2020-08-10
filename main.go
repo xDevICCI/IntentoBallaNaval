@@ -100,6 +100,7 @@ func obtener_coordenada(){
 	//usuario ingresará las coordenadas por teclado - INPUT CONSOLE
 	for ok := true; ok; ok = res > 0 {
 
+		//aca debe recibir
 		fmt.Println("Introduzca las coordenadas (x,y)")
 		_, err: fmt.Scan(&entrada_usuario)
 
@@ -113,7 +114,8 @@ func obtener_coordenada(){
 					fmt.Println("Enrada Inválida, muy pocas / muchas coordenadas")
 				}
 				//checkea los valores de enteros  estan entre 1 y 10
-				coor[0] > 9 || coor[0] < 0 || coor[1] > 9 || coor[1] < 1{
+				coor[0] > 9 || coor[0] < 0 || coor[1] > 9 || coor[1] < 1
+				{
 					fmt.Println("Entrada invalida, Por favor use valores entre 1 a 10 unicamente")
 				}
 
@@ -197,11 +199,10 @@ func v_o_h(entrada_usuario int){
 }
 
 //en esta funcion, leera las coordenadas el usuario atraves de una funcion ya definida
-func usuario_movimiento(tablero string) string
-{
-	var x int;
-	var y int;
-	res string;
+func usuario_movimiento(tablero string) {
+	var x int
+	var y int
+	res string
 
 	for ok := true; ok; ok = res > 0 {
 		x, y = obtener_coordenada()
@@ -315,4 +316,3 @@ func main() {
 	intbarco , err3 := strconv.Atoi(os.Args[4])
 
 }
-
