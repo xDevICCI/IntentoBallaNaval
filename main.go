@@ -64,6 +64,54 @@ func (tcf Block) Do() {
 
 }
 
+func usuario_lugar_barcos(tablero string, barcos int) string{
+	//permite al usuario colocar barcos y también verificar si son posiciones válidas
+	
+	var validado bool
+
+
+	for barco := 0; i < barcos; i++ {
+		validado = false
+	}
+
+}
+
+func AI_lugar_barcos(tablero string, barcos int) string{
+	//la computadora usará al azar para generar lugares de envío
+
+	res int;
+	var validado bool
+
+	x int
+	y int
+	o int
+	barco int
+
+	for i := 0; i < barcos; i++ {
+		validado = false
+		for ok := true; ok; ok = res > 0 {
+			 x  = rand.Intn(10)
+			 y 	= rand.Intn(10)
+			 o 	= rand.Intn(0, 1)
+
+			 if o == 0 {
+				 orientacion = "v"
+			 }else{
+				 orientacion = "h"
+			 }
+
+			 validado = validar(tablero, barcos[barco], x, y, orientacion)
+			 //ubicar los barcos
+			 fmt.Println("Maquina AI ubicando en " + barco)
+			 tablero = lugar_barco(tablero, barcos[barco], barco[0], orientacion, x, y)
+		}
+	}
+
+	return tablero
+
+
+}
+
 
 func obtener_coordenada()
 {
@@ -73,7 +121,7 @@ func obtener_coordenada()
 	//usuario ingresará las coordenadas por teclado - INPUT CONSOLE
 	for ok := true; ok; ok = res > 0 {
 
-		fmt.Printf("Introduzca las coordenadas (x,y)")
+		fmt.Println("Introduzca las coordenadas (x,y)")
 		_, err: fmt.Scan(&entrada_usuario)
 
 		Block{
@@ -83,11 +131,11 @@ func obtener_coordenada()
 				coor := entrada_usuario.Split("", ",") 
 
 				if len(coor) != 2{
-					fmt.Printf("Enrada Inválida, muy pocas / muchas coordenadas")
+					fmt.Println("Enrada Inválida, muy pocas / muchas coordenadas")
 				}
 				//checkea los valores de enteros  estan entre 1 y 10
 				coor[0] > 9 || coor[0] < 0 || coor[1] > 9 || coor[1] < 1{
-					fmt.Printf("Entrada invalida, Por favor use valores entre 1 a 10 unicamente")
+					fmt.Println("Entrada invalida, Por favor use valores entre 1 a 10 unicamente")
 				}
 
 				return coor
@@ -96,13 +144,13 @@ func obtener_coordenada()
 	
 			Catch: func(e Exception) {
 	
-				fmt.Printf("Entrada Invalida. Por favor ingrese solamente valores numericos para las coordenadas", e)
+				fmt.Println("Entrada Invalida. Por favor ingrese solamente valores numericos para las coordenadas", e)
 	
 			},
 	
 			Finally: func() {
 	
-				fmt.Printf("Finally...")
+				fmt.Println("Finally...")
 	
 			},
 	
@@ -112,8 +160,65 @@ func obtener_coordenada()
 
 }
 
+/*  recibe tablero, tamaño barco, y posicion, lugar barcos */
+func lugar_barco(tablero string, barco int, s int, orientacion string, x int, y int) string {
+
+	if orientacion == "v" {
+		for i := 0; i < barco; i++ {
+			tablero[x+i][y] = s
+		}
+	}else if orientacion == "h" {
+		for i := 0; i < barco; i++ {
+			tablero[x][y+i] = s
+		}
+	}
+	return tablero
+}
+
+// comprueba si el barco realmente encajará ( en las celdas tablero)
+func validar(tablero string, barco int, x int, y int, orientacion string) bool {
+	//verifique si el barco encajará, según el tamaño del barco, el tablero, la orientación y las coordenadas
+
+	if orientacion == "v"  && x  + barco > 10{
+		return false
+	}else if orientacion == "h" && y + barco > 10 {
+		return false
+	}else{
+		if orientacion == "v" {
+			for i := 0; i < barco; i++ {
+				if tablero[x+i][y] != -1 {
+					return false
+				}
+			}
+		}else if orientacion == "h" {
+			for i := 0; i < barco; i++ {
+				if tablero[x][y+i] != -1 {
+					return false
+				}
+			}
+		}
+	}
+}
+
+//en esta funcion mira si el barco es horizontal o vertical
+func v_o_h(entrada_usuario int){
+
+	//obtiene orientacion del barco
+
+	for ok := true; ok; ok = res > 0 {
+		fmt.Println("Vertical o Horizontal (v,h)")
+		_, err: fmt.Scan(&entrada_usuario)
+
+		if entrada_usuario == "v" || entrada_usuario == "h" {
+			return entrada_usuario
+		}else{
+			fmt.Println("Entrada invalida, por favor ingrese unicamente v o h")
+		}
+	}
+}
+
 //en esta funcion, leera las coordenadas el usuario atraves de una funcion ya definida
-func usuario_movimiento(tablero string)
+func usuario_movimiento(tablero string) string
 {
 	var x int;
 	var y int;
@@ -124,7 +229,19 @@ func usuario_movimiento(tablero string)
 		res = realizar_movimiento(tablero, x, y)
 
 		if res == "Bombazo"{
-			fmt.Printf("Bombazo en " + strconv( x+1 ) )
+			fmt.Println("Bombazo en " + strconv( x+1 )  + "," + strconv( y+1 ) )
+			verif_hundido(tablero, x, y)
+			tablero[x][y] = '$'
+
+			if verif_ganador(tablero){
+				return "Ganador"
+			}
+		}else if res == "Fallido" {
+			fmt.Println("Lo siento, " , + strconv( x + 1 ) + "," + strconv( y+1 ) + "es un Fallo")
+			tablero[x][y] = "*"
+		}
+		if res != "Intente nuevamente" {
+			return tablero
 		}
 	}
 }
@@ -143,14 +260,14 @@ func AI_movimiento(tablero string){
 		res = realizar_movimiento(tablero, x, y)
 
 		if res == "bombazo" {
-			fmt.Printf("Sam bombazo en " + strconv.Itoa(x+1) + "," + strconv.Itoa(y+1))
+			fmt.Println("Sam bombazo en " + strconv.Itoa(x+1) + "," + strconv.Itoa(y+1))
 			verif_hundido(tablero, x, y)
 			tablero[x][y] = '$'
 			if verif_ganador(tablero) {
 				return "ganador"
 			}
 		}else if res == "fallido" {
-			fmt.Printf("Lo siento, " + strconv.Itoa(x+1) + "," + strconv.Itoa(y+1)  + "no fue nada por el momento")
+			fmt.Println("Lo siento, " + strconv.Itoa(x+1) + "," + strconv.Itoa(y+1)  + "no fue nada por el momento")
 			tablero[x][y] = "*"
 		}
 		if res != "intente otra vez" {
@@ -193,7 +310,7 @@ func verif_hundido(tablero string, x string, y string){
 	/* marca la celda como un daño y verifica si esta hundido el barco*/
 	tablero[-1][barco] -=1
 	if tablero[-1][barco] == 0 {
-		fmt.Printf(barco + "Hundido uwu")
+		fmt.Println(barco + "Hundido uwu")
 	}
 }
 
