@@ -27,6 +27,11 @@ func Throw(up Exception) {
 
 }
 
+type batalla struct{
+	tablero string
+	barcos int
+}
+
  
 func (tcf Block) Do() {
 
@@ -317,6 +322,34 @@ func main() {
 	x, err := strconv.Atoi(os.Args[3])
 	y, err1 := strconv.Atoi(os.Args[4])
 
-	
+
+	var tablero[] string
+	var fila int
+
+	var usuario_tablero string
+	var AI_tablero string
+
+	//supuestamente seteamos o llenamos la matriz
+	for i := 0; i < x; i++ {
+		fila = []
+		for j := 0; j < y; j++ {
+			fila = append(fila, -1)
+		}
+		tablero = append(tablero,fila)
+	}
+
+	usuario_tablero = deepcopy.copy(tablero)
+	AI_tablero = deepcopy.copy(tablero)
+
+	//debemos agregar los barcos o cantidad de barcos
+	usuario_tablero = append(usuario_tablero, deepcopy.copy(barcos))
+	AI_tablero = append(AI_tablero, deepcopy.copy(barcos))
+
+	//POSICIONAMOS LOS BARCOS PARA CADA TABLERO
+	usuario_tablero = usuario_lugar_barcos(usuario_tablero, barcos)
+	AI_tablero = AI_lugar_barcos(AI_tablero, barcos)
+
+
+
 
 }
