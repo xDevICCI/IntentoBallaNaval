@@ -79,13 +79,13 @@ func usuario_lugar_barcos(tablero string, barcos int) string{
 func AI_lugar_barcos(tablero string, barcos int) string{
 	//la computadora usará al azar para generar lugares de envío
 
-	res int;
+	var res int
 	var validado bool
 
-	x int
-	y int
-	o int
-	barco int
+	var x int
+	var y int
+	var o int
+	var barco int
 
 	for i := 0; i < barcos; i++ {
 		validado = false
@@ -113,8 +113,7 @@ func AI_lugar_barcos(tablero string, barcos int) string{
 }
 
 
-func obtener_coordenada()
-{
+func obtener_coordenada(){
 	var entrada_usuario int
 	var coor int
 
@@ -314,9 +313,9 @@ func verif_hundido(tablero string, x string, y string){
 	}
 }
 
-func verif_ganador(tablero string){
+func verif_ganador(tablero string) bool {
 
-	for i := 0; i < 9; i++ {
+	for i := 0; i < 9; i++ {//aqui falta agregar el argv
 		for j := 0; j < 9; j++ {
 			if tablero[i][j] != -1 && tablero[i][j] != '*' && tablero[i][j] != '$'{
 				//si no es un acierto, devuelve falso
