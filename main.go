@@ -30,6 +30,8 @@ func Throw(up Exception) {
 type batalla struct{
 	tablero string
 	barcos int
+	x int
+	y int
 }
 
  
@@ -48,36 +50,36 @@ func (tcf Block) Do() {
     }
     tcf.Try()
 }
-
+/*
 func usuario_lugar_barcos(tablero string, barcos int) string{
 	//permite al usuario colocar barcos y también verificar si son posiciones válidas
 	
 	var validado bool
 
 
-	for barco := 0; i < barcos; i++ {
+	for i := 0; i < barcos; i++ {
 		validado = false
 	}
 
-}
+}*/
 
-func AI_lugar_barcos(tablero string, barcos int) string{
+func AI_lugar_barcos(tablero string, barcos[] int) string{
 	//la computadora usará al azar para generar lugares de envío
 
 	var res int
 	var validado bool
-
+	var orientacion string
 	var x int
 	var y int
 	var o int
 	var barco int
 
-	for i := 0; i < barcos; i++ {
+	for barco := 0; barco < len(barcos); barco++ {
 		validado = false
-		for ok := true; ok; ok = res > 0 {
-			 x  = rand.Intn(10)
+		for validado == true {//while(not validado)
+			 x  = rand.Intn(10)// segun los parametros de argv
 			 y 	= rand.Intn(10)
-			 o 	= rand.Intn(0, 1)
+			 o 	= rand.Intn(1)
 
 			 if o == 0 {
 				 orientacion = "v"
@@ -87,40 +89,36 @@ func AI_lugar_barcos(tablero string, barcos int) string{
 
 			 validado = validar(tablero, barcos[barco], x, y, orientacion)
 			 //ubicar los barcos
-			 fmt.Println("Maquina AI ubicando en " + barco)
-			 tablero = lugar_barco(tablero, barcos[barco], barco[0], orientacion, x, y)
+
+			 fmt.Println("Maquina AI ubicando en " + strconv.Itoa(barco) )
+			 tablero = lugar_barco(tablero, barcos[barco], barco, orientacion, x, y)
 		}
 	}
 
 	return tablero
-
-
 }
 
 
 func obtener_coordenada(){
 	var entrada_usuario int
-	var coor int
+
+	var whil int
+
+	var coor[] int
 
 	//usuario ingresará las coordenadas por teclado - INPUT CONSOLE
-	for ok := true; ok; ok = res > 0 { //while(true)
+	for true { //while(true)
 
-		//aca debe recibir
-		fmt.Println("Introduzca las coordenadas (x,y)")
-		_, err: fmt.Scan(&entrada_usuario)
+
+		x := rand.Intn(10)
+		y := rand.Intn(10)
 
 		Block{
 
-			Try: func() {
+			Try: func() { 
 
-				coor := entrada_usuario.Split(" ", ",") 
-
-				if len(coor) != 2{
-					fmt.Println("Enrada Inválida, muy pocas / muchas coordenadas")
-				}
 				//checkea los valores de enteros  estan entre 1 y 10
-				coor[0] > 9 || coor[0] < 0 || coor[1] > 9 || coor[1] < 1
-				{
+				if coor[0] > 9 || coor[0] < 0 || coor[1] > 9 || coor[1] < 1{
 					fmt.Println("Entrada invalida, Por favor use valores entre 1 a 10 unicamente")
 				}
 
@@ -191,9 +189,9 @@ func v_o_h(entrada_usuario int){
 
 	//obtiene orientacion del barco
 
-	for ok := true; ok; ok = res > 0 {
+	for true {
 		fmt.Println("Vertical o Horizontal (v,h)")
-		_, err: fmt.Scan(&entrada_usuario)
+		_, err:= fmt.Scan(&entrada_usuario)
 
 		if entrada_usuario == "v" || entrada_usuario == "h" {
 			return entrada_usuario
@@ -204,12 +202,13 @@ func v_o_h(entrada_usuario int){
 }
 
 //en esta funcion, leera las coordenadas el usuario atraves de una funcion ya definida
-func usuario_movimiento(tablero string) {
+func usuario_movimiento(tablero string) string{
 	var x int
 	var y int
-	res string
+	var res string
+	var whil int
 
-	for ok := true; ok; ok = res > 0 {
+	for true { //while(true)
 		x, y = obtener_coordenada()
 		res = realizar_movimiento(tablero, x, y)
 
@@ -238,7 +237,7 @@ func AI_movimiento(tablero string){
 	var y int
 	var res string
 
-	for ok := true; ok; ok = res > 0 {
+	for true {
 		x = rand.Intn(10)
 		y = rand.Intn(10)
 
@@ -324,14 +323,13 @@ func main() {
 
 
 	var tablero[] string
-	var fila int
 
 	var usuario_tablero string
 	var AI_tablero string
 
 	//supuestamente seteamos o llenamos la matriz
 	for i := 0; i < x; i++ {
-		fila = []
+		var fila = []int //
 		for j := 0; j < y; j++ {
 			fila = append(fila, -1)
 		}
