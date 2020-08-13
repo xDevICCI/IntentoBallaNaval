@@ -1,8 +1,11 @@
 package main
 
 import (
+	"fmt"
+	"math/rand"
 	"os"
 	"strconv"
+	"time"
 )
 
 type mapa struct {
@@ -11,15 +14,16 @@ type mapa struct {
 }
 
 type barco struct {
-	tamaño         [3]int
-	horizontal     bool
+	id             int
+	tamaño         int
+	horizontal     int
 	cantidad_barco int
 }
 
 func inicializar_barco() barco {
 
 	m := barco{
-		horizontal:     true,
+		horizontal:     0,
 		cantidad_barco: 1,
 	}
 
@@ -34,12 +38,26 @@ func inicializar_barco() barco {
 	}
 }	*/
 
-func insert_barcos_matriz(vector_barco []barco, matriz [][]int) {
-
+func insert_barcos_matriz(vector_barco []barco, matriz [][]barco) {
+	//vector_barco[1] = append(vector_barco, matriz[3][5])
+	print("soy tamaño vector ", len(vector_barco), "\n")
 	for i := 0; i < len(vector_barco); i++ {
-		for j := 0; j < len(vector_barco); j++ {
-			matriz[i][j] = vector_barco
+		rand.Seed(time.Now().UnixNano())
+		print(len(matriz))
+		s1 := rand.Intn(len(matriz) - 2)
+		s2 := rand.Intn(len(matriz) - 2)
+		print("\n", s1, "   ", s2)
+		fmt.Println()
+		var aux barco
+		aux.cantidad_barco = 1
+		if matriz[s1][s2].cantidad_barco == 0 {
+			matriz[s1][s2] = vector_barco[i]
+			matriz[s1+1][s2] = vector_barco[i]
+			matriz[s1+2][s2] = vector_barco[i]
+		} else {
+
 		}
+
 	}
 }
 
@@ -55,11 +73,19 @@ func crear_barco(cant_jugadores int, cant_barcos int) []barco {
 
 }
 
-func imprimir(mp [][]int) {
+func imprimir(mp [][]barco) {
 	for i := 0; i < len(mp); i++ {
+
 		print("\n")
 		for j := 0; j < len(mp); j++ {
-			print(mp[i][j])
+			var aux, aux2 barco
+			aux.cantidad_barco = 1
+			aux = mp[i][j]
+			if aux.cantidad_barco == aux2.cantidad_barco {
+				print("0")
+			} else {
+				print("1")
+			}
 		}
 	}
 }
@@ -75,13 +101,15 @@ func main() {
 	print("\ncantidad barcos = ", cant_barcos)
 
 	//crear mapa*
-	mp := make([][]int, x)
+	mp := make([][]barco, x)
 	for i := 0; i < x; i++ {
-		mp[i] = make([]int, y)
+		mp[i] = make([]barco, y)
 	}
 
 	imprimir(mp)
 	var vector []barco
 	vector = crear_barco(cant_jugadores, cant_barcos)
 	insert_barcos_matriz(vector, mp)
+	print("\n")
+	imprimir(mp)
 }
