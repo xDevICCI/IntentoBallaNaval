@@ -11,19 +11,21 @@ type mapa struct {
 }
 
 type barco struct {
-	tamaño         int
-	horizontal     int
+	tamaño         [3]int
+	horizontal     bool
 	cantidad_barco int
 }
 
-/*func inicializar_barco() {
+func inicializar_barco() barco {
+
 	m := barco{
-		tamaño:         3,
-		horizontal:     1,
+		horizontal:     true,
 		cantidad_barco: 1,
 	}
+
+	return m
 }
-*/
+
 /*func imprimir(m *mapa) {
 	for i := 0; i < 10; i++ {
 		for j := 0; i < 10; j++ {
@@ -31,6 +33,27 @@ type barco struct {
 		}
 	}
 }	*/
+
+func insert_barcos_matriz(vector_barco []barco, matriz [][]int) {
+
+	for i := 0; i < len(vector_barco); i++ {
+		for j := 0; j < len(vector_barco); j++ {
+			matriz[i][j] = vector_barco
+		}
+	}
+}
+
+func crear_barco(cant_jugadores int, cant_barcos int) []barco {
+
+	var vector_barco []barco //creamos la variable para guardar los datos barco
+
+	for i := 0; i < cant_barcos; i++ {
+		vector_barco = append(vector_barco, inicializar_barco()) // agregar los datos
+	}
+
+	return vector_barco
+
+}
 
 func imprimir(mp [][]int) {
 	for i := 0; i < len(mp); i++ {
@@ -42,7 +65,7 @@ func imprimir(mp [][]int) {
 }
 
 func main() {
-	
+
 	cant_jugadores, _ := strconv.Atoi(os.Args[1])
 	cant_barcos, _ := strconv.Atoi(os.Args[2])
 	x, _ := strconv.Atoi(os.Args[3])
@@ -58,5 +81,7 @@ func main() {
 	}
 
 	imprimir(mp)
-
+	var vector []barco
+	vector = crear_barco(cant_jugadores, cant_barcos)
+	insert_barcos_matriz(vector, mp)
 }
