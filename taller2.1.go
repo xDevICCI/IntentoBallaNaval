@@ -33,17 +33,20 @@ func insert_barcos_matriz(vector_barco []barco, matriz [][]barco) {
 	//vector_barco[1] = append(vector_barco, matriz[3][5])
 	for i := 0; i < len(vector_barco); i++ {
 		rand.Seed(time.Now().UnixNano())
-		print(len(matriz))
 		s1 := rand.Intn(len(matriz) - 2)
 		s2 := rand.Intn(len(matriz) - 2)
-		print("\n barco posicion [", s1, "][", s2, "] , en la iteracion N ", i)
+		print("\n barco posicion [", s1, "][", s2, "] , en la iteracion N ", i+1)
 		var aux barco
 		aux.id = 1
 		if matriz[s1][s2].id != 0 { // casilla ocupada
-			for j := 0; j < 10; i++ {
-				s1 = rand.Intn(len(matriz) - 2)
-				s2 = rand.Intn(len(matriz) - 2)
-				continue
+			s1 = rand.Intn(len(matriz) - 2)
+			s2 = rand.Intn(len(matriz) - 2)
+			if matriz[s1+1][s2].id == 0 && matriz[s1+2][s2].id == 0 {
+				matriz[s1][s2] = vector_barco[i]
+				matriz[s1+1][s2] = vector_barco[i]
+				matriz[s1+2][s2] = vector_barco[i]
+			} else {
+				print(" 1 posicion ocupada")
 			}
 		} else if matriz[s1][s2].id == 0 { // caso cuando las casillas esten desocupadas
 			if matriz[s1][s2+1].id == 0 && matriz[s1][s2+2].id == 0 {
@@ -52,7 +55,7 @@ func insert_barcos_matriz(vector_barco []barco, matriz [][]barco) {
 				matriz[s1][s2+2] = vector_barco[i]
 
 			} else {
-				print("posicion ocupada")
+				print(" 2 posicion ocupada")
 			}
 		} else {
 			print("caso que nose")
@@ -75,18 +78,33 @@ func crear_barco(cant_jugadores int, cant_barcos int) []barco {
 }
 
 func imprimir(mp [][]barco) {
+	print(" º")
+	for k := 0; k < len(mp); k++ {
+		print("  ", k, "")
+	}
 	for i := 0; i < len(mp); i++ {
-
-		print("\n")
+		print("\n ", i, " ")
 		for j := 0; j < len(mp); j++ {
-			var aux, aux2 barco
-			aux.id = 1
-			aux = mp[i][j]
-			if aux.id == aux2.id {
-				print(" 0 ")
+			if j == 0 {
+				var aux, aux2 barco
+				aux.id = 1
+				aux = mp[i][j]
+				if aux.id == aux2.id {
+					print(" - ")
+				} else {
+					print(" ", aux.numero, " ")
+				}
 			} else {
-				print(" ", aux.numero, " ")
+				var aux, aux2 barco
+				aux.id = 1
+				aux = mp[i][j]
+				if aux.id == aux2.id {
+					print(" - ")
+				} else {
+					print(" ", aux.numero, " ")
+				}
 			}
+
 		}
 	}
 }
