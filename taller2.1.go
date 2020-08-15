@@ -31,7 +31,6 @@ func inicializar_barco() barco {
 
 func insert_barcos_matriz(vector_barco []barco, matriz [][]barco) {
 	//vector_barco[1] = append(vector_barco, matriz[3][5])
-
 	for i := 0; i < len(vector_barco); i++ {
 		rand.Seed(time.Now().UnixNano())
 		print(len(matriz))
@@ -40,16 +39,20 @@ func insert_barcos_matriz(vector_barco []barco, matriz [][]barco) {
 		print("\n barco posicion [", s1, "][", s2, "] , en la iteracion N ", i)
 		var aux barco
 		aux.id = 1
-		if matriz[s1][s2].id == 1 {
-
-			print("\n encontre casilla ocupada [", s1, "][", s2, "] , en la iteracion N ", i)
-		} else if matriz[s1][s2].id == 0 { // para no llenar ensima de un barco
+		if matriz[s1][s2].id != 0 { // casilla ocupada
+			for j := 0; j < 10; i++ {
+				s1 = rand.Intn(len(matriz) - 2)
+				s2 = rand.Intn(len(matriz) - 2)
+				continue
+			}
+		} else if matriz[s1][s2].id == 0 { // caso cuando las casillas esten desocupadas
 			if matriz[s1][s2+1].id == 0 && matriz[s1][s2+2].id == 0 {
 				matriz[s1][s2] = vector_barco[i]
 				matriz[s1][s2+1] = vector_barco[i]
 				matriz[s1][s2+2] = vector_barco[i]
+
 			} else {
-				print("tamaño del barco no entra")
+				print("posicion ocupada")
 			}
 		} else {
 			print("caso que nose")
