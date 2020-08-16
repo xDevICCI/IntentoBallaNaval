@@ -202,7 +202,7 @@ func main() {
 		atacar(mp)
 		print("")
 		imprimir(mp)
-		if 1 == 0 {
+		if mp == 0 {
 			break
 		}
 	}
