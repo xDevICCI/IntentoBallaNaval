@@ -14,10 +14,10 @@ type mapa struct {
 
 type barco struct {
 	id         int
-	tamaño     int
+	ataque     bool
 	horizontal bool
 	numero     int
-	vida       bool
+	vida       int
 }
 
 func inicializar_barco() barco {
@@ -30,19 +30,20 @@ func inicializar_barco() barco {
 	return m
 }
 
+/*
 func realizar_movimiento(matriz [][]barco, x int, y int){
 	if matriz [x][y]barco == -1{
 		return "fallido"
-	}else if matriz [x][y]barco == '*' || matriz [x][y]barco == '$' {
+	}else if matriz [x][y]barco == '*' && matriz [x][y]barco == '$' {
 		return "Intente nuevamente"
 	}else{
 		return "bombazo"
 	}
-}
+}*/
 
-func movimiento_maquina(matriz [][]barco){
+/*func movimiento_maquina(matriz [][]barco) {
 
-	for true{
+	for true {
 		for i := 0; i < len(matriz); i++ {
 			rand.Seed(time.Now().UnixNano())
 			print(len(matriz))
@@ -50,7 +51,7 @@ func movimiento_maquina(matriz [][]barco){
 			s2 := rand.Intn(len(matriz) - 2)
 		}
 	}
-}
+}*/
 
 func insert_barcos_matriz(vector_barco []barco, matriz [][]barco, posicion int) { //funcion para insertar barcos
 	//vector_barco[1] = append(vector_barco, matriz[3][5])
@@ -58,26 +59,20 @@ func insert_barcos_matriz(vector_barco []barco, matriz [][]barco, posicion int) 
 		rand.Seed(time.Now().UnixNano())
 		s1 := rand.Intn(len(matriz) - 2)
 		s2 := rand.Intn(len(matriz) - 2)
-		print("\n barco posicion [", s1, "][", s2, "] , en la iteracion N ", i+1)
 		var aux barco
 		aux.id = 1
 		if matriz[s1][s2].id != 0 { // casilla ocupada
-			s1 = rand.Intn(len(matriz) - 2)
-			s2 = rand.Intn(len(matriz) - 2)
-			if matriz[s1+1][s2].id == 0 && matriz[s1+2][s2].id == 0 && matriz[s1][s2].id == 0 {
-				for k := 0; k < 3; k++ {
-					matriz[s1][s2+k] = vector_barco[i]
+			for {
+				x := rand.Intn(len(matriz) - 2)
+				y := rand.Intn(len(matriz) - 2)
+				if matriz[x][y].id == 0 && matriz[x][y+1].id == 0 && matriz[x][y+2].id == 0 {
+					s1 = x
+					s2 = y
+					break
 				}
-				posicion = posicion + 1
-			} else {
-				s1 = rand.Intn(len(matriz) - 2)
-				s2 = rand.Intn(len(matriz) - 2)
-				if matriz[s1][s2+1].id == 0 && matriz[s1][s2+2].id == 0 {
-					for k := 0; k < 3; k++ {
-						matriz[s1+k][s2] = vector_barco[i]
-						matriz[s1][s2].horizontal = false
-					}
-				}
+			}
+			for k := 0; k < 3; k++ {
+				matriz[s1][s2+k] = vector_barco[i]
 			}
 		} else if matriz[s1][s2].id == 0 { // caso cuando las casillas esten desocupadas
 			if matriz[s1][s2+1].id == 0 && matriz[s1][s2+2].id == 0 {
@@ -85,8 +80,14 @@ func insert_barcos_matriz(vector_barco []barco, matriz [][]barco, posicion int) 
 					matriz[s1][s2+k] = vector_barco[i]
 				}
 				posicion = posicion + 1
+			} else if matriz[s1+1][s2].id == 0 && matriz[s1+1][s2].id == 0 {
+				for k := 0; k < 3; k++ {
+					matriz[s1+k][s2] = vector_barco[i]
+					matriz[s1][s2].horizontal = false
+					posicion = posicion + 1
+				}
 			} else {
-				print(" 2 posicion ocupada")
+				print("asdasd")
 			}
 		} else {
 			print("caso que nose")
@@ -94,11 +95,46 @@ func insert_barcos_matriz(vector_barco []barco, matriz [][]barco, posicion int) 
 	}
 }
 
-func atacar(mp [][]barco,vector_barco []) {
-	print("funcion para atacar")
-	for i:=0; i<len(vector_barco);i++{
-		for j:=0;j<len(vector_barco);j++{
-			print("asd")
+func atacar(mp [][]barco) {
+	for i := 0; i < len(mp); i++ {
+		for j := 0; j < len(mp); j++ {
+			if mp[i][j].numero != 0 && mp[i][j].horizontal == true && mp[i][j].ataque == true && mp[i][j].vida != 3 { //si encontramos barcos entonces verificar posiciones siguientes y es horizontal
+				aux := mp[i][j].numero //guardo para saber el id del barco para que reconozca los otros del mismo numero
+				mp[i][j+1].ataque = false
+				mp[i][j+2].ataque = false
+				x := rand.Intn(len(mp))
+				y := rand.Intn(len(mp))
+				if mp[x][y].numero == aux { //posicion del mismo barco vuelve a randomearW
+					for {
+						s1 := rand.Intn(len(mp) - 1)
+						s2 := rand.Intn(len(mp) - 1)
+						if mp[x][y].numero == aux {
+							x = s1
+							y = s2
+							break
+						}
+					}
+					if mp[x][y].numero != 0 && mp[x][y].vida == 0 {
+						print("\n barco Numero ", mp[x][y].numero, "ataco : ", "[", x, "]", "[", y, "]\n ")
+						mp[x][y].vida = 3
+					} else if mp[x][y].numero != 0 && mp[x][y].vida == 3 {
+						print("ya ataque aqui")
+					} else {
+						print("\n barco Numero ", mp[x][y].numero, " fallo : ", "[", x, "]", "[", y, "]\n ")
+					}
+				} else { // ataca cualquier parte del mapa
+					if mp[x][y].numero != 0 && mp[x][y].vida == 0 {
+						print("\n barco Numero ", mp[x][y].numero, "ataco : ", "[", x, "]", "[", y, "]\n ")
+						mp[x][y].vida = 3
+					} else if mp[x][y].numero != 0 && mp[x][y].vida == 3 {
+						print("ya ataque aqui")
+					} else {
+						print("\n barco Numero ", mp[x][y].numero, " fallo : ", "[", x, "]", "[", y, "]\n ")
+					}
+				}
+			} else {
+			}
+			print("")
 		}
 	}
 }
@@ -110,11 +146,9 @@ func crear_barco(cant_jugadores int, cant_barcos int) []barco {
 	for i := 0; i < cant_barcos; i++ {
 		vector_barco = append(vector_barco, inicializar_barco()) // agregar los datos
 		vector_barco[i].numero = vector_barco[i].numero + i
-		print(" \n atributo numero del barco ", vector_barco[i].numero)
+		vector_barco[i].ataque = true
 	}
-
 	return vector_barco
-
 }
 
 func imprimir(mp [][]barco) {
@@ -131,7 +165,12 @@ func imprimir(mp [][]barco) {
 			if aux.id == aux2.id {
 				print(" - ")
 			} else {
-				print(" ", aux.numero, " ")
+				if mp[i][j].vida == 3 {
+					print(" ", "x", " ")
+				} else {
+					print(" ", aux.numero, " ")
+				}
+
 			}
 		}
 	}
@@ -158,4 +197,13 @@ func main() {
 	insert_barcos_matriz(vector, mp, 0)
 	print("\n")
 	imprimir(mp)
+	print("\n")
+	for {
+		atacar(mp)
+		print("")
+		imprimir(mp)
+		if 1 == 0 {
+			break
+		}
+	}
 }
