@@ -30,6 +30,28 @@ func inicializar_barco() barco {
 	return m
 }
 
+func realizar_movimiento(matriz [][]barco, x int, y int){
+	if matriz [x][y]barco == -1{
+		return "fallido"
+	}else if matriz [x][y]barco == '*' || matriz [x][y]barco == '$' {
+		return "Intente nuevamente"
+	}else{
+		return "bombazo"
+	}
+}
+
+func movimiento_maquina(matriz [][]barco){
+
+	for true{
+		for i := 0; i < len(matriz); i++ {
+			rand.Seed(time.Now().UnixNano())
+			print(len(matriz))
+			s1 := rand.Intn(len(matriz) - 2)
+			s2 := rand.Intn(len(matriz) - 2)
+		}
+	}
+}
+
 func insert_barcos_matriz(vector_barco []barco, matriz [][]barco, posicion int) { //funcion para insertar barcos
 	//vector_barco[1] = append(vector_barco, matriz[3][5])
 	for i := posicion; i < len(vector_barco); i++ {
