@@ -123,14 +123,7 @@ func atacar(mp [][]barco) {
 						print("\n barco Numero ", mp[x][y].numero, " fallo : ", "[", x, "]", "[", y, "]\n ")
 					}
 				} else { // ataca cualquier parte del mapa
-					if mp[x][y].numero != 0 && mp[x][y].vida == 0 {
-						print("\n barco Numero ", mp[x][y].numero, "ataco : ", "[", x, "]", "[", y, "]\n ")
-						mp[x][y].vida = 3
-					} else if mp[x][y].numero != 0 && mp[x][y].vida == 3 {
-						print("ya ataque aqui")
-					} else {
-						print("\n barco Numero ", mp[x][y].numero, " fallo : ", "[", x, "]", "[", y, "]\n ")
-					}
+					print("")
 				}
 			} else {
 			}
@@ -200,9 +193,10 @@ func main() {
 	print("\n")
 	for {
 		atacar(mp)
-		print("")
+		print("\n")
 		imprimir(mp)
-		if mp == 0 {
+		print("\n")
+		if 1 == 0 {
 			break
 		}
 	}
