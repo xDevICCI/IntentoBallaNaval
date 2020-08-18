@@ -95,6 +95,31 @@ func insert_barcos_matriz(vector_barco []barco, matriz [][]barco, posicion int) 
 	}
 }
 
+func verificarTablero(mp [][]barco) bool {
+
+	//var contador int
+
+	//contador = 0
+
+	for i := 0; i < len(mp); i++ {
+		print("\n ", i, " ")
+		for j := 0; j < len(mp); j++ {
+
+			if mp[i][j].numero == 0 { // si no hay barcos
+				print("\n")
+			} else if mp[i][j].vida == 3 { // barco caido
+				print("\n barco caido en ", "[", i, "]", "[", j, "]")
+
+			} else {
+				print("\nencontre 1 barco ")
+				return false
+			}
+		}
+	}
+
+	return false
+}
+
 func atacar(mp [][]barco) {
 	for i := 0; i < len(mp); i++ {
 		for j := 0; j < len(mp); j++ {
@@ -104,17 +129,21 @@ func atacar(mp [][]barco) {
 				mp[i][j+2].ataque = false
 				x := rand.Intn(len(mp))
 				y := rand.Intn(len(mp))
+
 				if mp[x][y].numero == aux { //posicion del mismo barco vuelve a randomearW
+					print("qwe", x, y)
 					for {
 						s1 := rand.Intn(len(mp) - 1)
 						s2 := rand.Intn(len(mp) - 1)
-						if mp[x][y].numero == aux {
+						if mp[x][y].numero != aux {
 							x = s1
 							y = s2
 							break
 						}
 					}
-					if mp[x][y].numero != 0 && mp[x][y].vida == 0 {
+					print("\n")
+					print("ads", x, y)
+					if mp[x][y].numero != 0 && mp[x][y].vida == 0 { // si hay un barco
 						print("\n barco Numero ", mp[x][y].numero, "ataco : ", "[", x, "]", "[", y, "]\n ")
 						mp[x][y].vida = 3
 					} else if mp[x][y].numero != 0 && mp[x][y].vida == 3 {
@@ -163,7 +192,6 @@ func imprimir(mp [][]barco) {
 				} else {
 					print(" ", aux.numero, " ")
 				}
-
 			}
 		}
 	}
@@ -192,11 +220,11 @@ func main() {
 	imprimir(mp)
 	print("\n")
 	for {
-		atacar(mp)
+		go atacar(mp)
 		print("\n")
 		imprimir(mp)
 		print("\n")
-		if 1 == 0 {
+		if verificarTablero(mp) == true {
 			break
 		}
 	}
