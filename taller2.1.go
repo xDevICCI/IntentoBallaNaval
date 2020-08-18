@@ -119,7 +119,6 @@ func verificarTablero(mp [][]barco) bool {
 
 	return false
 }
-
 func atacar(mp [][]barco) {
 	for i := 0; i < len(mp); i++ {
 		for j := 0; j < len(mp); j++ {
@@ -131,28 +130,25 @@ func atacar(mp [][]barco) {
 				y := rand.Intn(len(mp))
 
 				if mp[x][y].numero == aux { //posicion del mismo barco vuelve a randomearW
-					print("qwe", x, y)
 					for {
 						s1 := rand.Intn(len(mp) - 1)
 						s2 := rand.Intn(len(mp) - 1)
-						if mp[x][y].numero != aux {
+						if mp[x][y].numero == aux {
 							x = s1
 							y = s2
 							break
 						}
 					}
-					print("\n")
-					print("ads", x, y)
 					if mp[x][y].numero != 0 && mp[x][y].vida == 0 { // si hay un barco
-						print("\n barco Numero ", mp[x][y].numero, "ataco : ", "[", x, "]", "[", y, "]\n ")
+						print("\n barco Numero ", aux, " ataco : ", "[", x, "]", "[", y, "] acerto \n ")
 						mp[x][y].vida = 3
 					} else if mp[x][y].numero != 0 && mp[x][y].vida == 3 {
 						print("ya ataque aqui")
 					} else {
-						print("\n barco Numero ", mp[x][y].numero, " fallo : ", "[", x, "]", "[", y, "]\n ")
+						print("\n barco Numero ", aux, " ataco : ", "[", x, "]", "[", y, "] fallo\n ")
 					}
 				} else { // ataca cualquier parte del mapa
-					print("")
+					print(" barco N ", aux, " ataco en =  [", x, "]", "[", y, "] fallo \n ")
 				}
 			} else {
 			}
@@ -220,11 +216,11 @@ func main() {
 	imprimir(mp)
 	print("\n")
 	for {
-		go atacar(mp)
+		atacar(mp)
 		print("\n")
 		imprimir(mp)
 		print("\n")
-		if verificarTablero(mp) == true {
+		if 0 == 1 {
 			break
 		}
 	}
