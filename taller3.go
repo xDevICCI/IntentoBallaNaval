@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 	"os"
 	"strconv"
@@ -15,12 +14,12 @@ type mapa struct {
 }
 
 type gusano struct {
-	tamaño     int  //
-	id         int  //
-	horizontal bool //
-	comida     int  //cantidad de comida
-	cabeza     bool //comienza en false // true para decir que es cabeza
-
+	tamaño     int   //
+	id         int   //
+	horizontal bool  //
+	comida     int   //cantidad de comida
+	cabeza     bool  //comienza en false // true para decir que es cabeza
+	fieldNext  *mapa //esta variable permitira ir restando ( comer) el valor de alimento y guardando
 }
 
 type Color string
@@ -100,7 +99,7 @@ func color(mp [][]mapa, i int, j int) { //funcion para pasar cambiar de color
 	if mp[i][j].guzanito.id == 0 {
 		print(ColorBlue, " ■ ")
 	} else if mp[i][j].guzanito.id == 1 {
-		print(ColorBlack, " ■ ")
+		print(ColorYellow, " ■ ")
 	} else if mp[i][j].guzanito.id == 2 {
 		print(ColorGreen, " ■ ")
 	} else if mp[i][j].guzanito.id == 3 {
@@ -130,17 +129,58 @@ func imprimir(mp [][]mapa) {
 		}
 	}
 }
+
 func comer(mp [][]mapa, numero int, i int, j int) {
 	switch numero {
 	case 1:
-		fmt.Println("→ ")
-		mp[i][j]
+		//J SE MUEVE HORIZONTAL
+		//I SE MUEVE VERTICAL
+		mp[i][j].guzanito.fieldNext = &mp[i][j+1]
+		mp[i][j].guzanito.fieldNext.numero = mp[i][j].guzanito.fieldNext.numero - 1
+		mp[i][j+1].numero = mp[i][j].guzanito.fieldNext.numero
+		avanzar(mp, 1, i, j)
 	case 2:
-		fmt.Println("↑ ")
+		mp[i][j].guzanito.fieldNext = &mp[i-1][j]
+		mp[i][j].guzanito.fieldNext.numero = mp[i][j].guzanito.fieldNext.numero - 1
+		mp[i-1][j].numero = mp[i][j].guzanito.fieldNext.numero
+		avanzar(mp, 2, i, j)
 	case 3:
-		fmt.Println("↓ ")
+		mp[i][j].guzanito.fieldNext = &mp[i+1][j]
+		mp[i][j].guzanito.fieldNext.numero = mp[i][j].guzanito.fieldNext.numero - 1
+		mp[i+1][j].numero = mp[i][j].guzanito.fieldNext.numero
+		avanzar(mp, 3, i, j)
 	case 4:
-		fmt.Println("← ")
+		mp[i][j].guzanito.fieldNext = &mp[i][j-1]
+		mp[i][j].guzanito.fieldNext.numero = mp[i][j].guzanito.fieldNext.numero - 1
+		mp[i][j-1].numero = mp[i][j].guzanito.fieldNext.numero
+		avanzar(mp, 4, i, j)
+
+	}
+}
+
+func avanzar(mp [][]mapa, numero int, i int, j int) {
+	switch numero {
+	case 1:
+		//ESTE ES PARA LA DERECHA
+		if mp[i][j].guzanito.fieldNext.numero == 0 {
+			mp[i][j+1] = mp[i][j]
+		}
+	case 2:
+
+		//ESTE ES PARA ARRIBA
+		if mp[i][j].guzanito.fieldNext.numero == 0 {
+			mp[i-1][j] = mp[i][j]
+		}
+	case 3:
+		//ESTE ES PARA ABAJO
+		if mp[i][j].guzanito.fieldNext.numero == 0 {
+			mp[i+1][j] = mp[i][j]
+		}
+	case 4:
+		//ESTE ES PARA LA IZQUIERDA
+		if mp[i][j].guzanito.fieldNext.numero == 0 {
+			mp[i][j-1] = mp[i][j]
+		}
 	}
 }
 
@@ -151,27 +191,34 @@ func buscar(mp [][]mapa) { // funcion para buscar donde comer
 		for j := 0; j < len(mp); j++ {
 			if mp[i][j].guzanito.cabeza == true {
 				print("\n gusano cabeza en [", i, "],[", j, "]\n")
-				if j == 0 { //priera columna eje J
+				if j == 0 { //primera columna eje J
 					if i == 0 {
 						if mp[i][j+1].activo == false && mp[i][j+1].numero != 0 {
 							print("→ ")
+							comer(mp, 1, i, j)
 
 						} else if mp[i+1][j].activo == false && mp[i+1][j].numero != 0 {
 							print("↓ ")
+							comer(mp, 3, i, j)
 						}
 					} else if 0 < i && i < len(mp)-1 {
 						if mp[i+1][j].activo == false && mp[i+1][j].numero != 0 {
 							print("↓ ")
+							comer(mp, 3, i, j)
 						} else if mp[i][j+1].activo == false && mp[i][j+1].numero != 0 {
 							print("→ ")
+							comer(mp, 1, i, j)
 						} else if mp[i-1][j].activo == false && mp[i-1][j].numero != 0 {
 							print("↑ ")
+							comer(mp, 2, i, j)
 						}
 					} else if i == len(mp)-1 {
 						if mp[i][j+1].activo == false && mp[i][j+1].numero != 0 {
 							print("→ ")
+							comer(mp, 1, i, j)
 						} else if mp[i-1][j].activo == false && mp[i-1][j].numero != 0 {
 							print("↑ ")
+							comer(mp, 2, i, j)
 						}
 
 					}
@@ -180,23 +227,30 @@ func buscar(mp [][]mapa) { // funcion para buscar donde comer
 					if i == 0 {
 						if mp[i+1][j].activo == false && mp[i+1][j].numero != 0 {
 							print("↓ ")
+							comer(mp, 3, i, j)
 						} else if mp[i][j-1].activo == false && mp[i][j-1].numero != 0 {
 							print("← ")
+							comer(mp, 4, i, j)
 						}
 					} else if i > 0 && i < len(mp)-1 {
 						if mp[i][j-1].activo == false && mp[i][j-1].numero != 0 {
 							print("← ")
+							comer(mp, 4, i, j)
 						} else if mp[i+1][j].activo == false && mp[i+1][j].numero != 0 {
 							print("↓ ")
+							comer(mp, 3, i, j)
 						} else if mp[i-1][j].activo == false && mp[i-1][j].numero != 0 {
 							print("↑ ")
+							comer(mp, 2, i, j)
 						}
 
 					} else if i == len(mp)-1 {
 						if mp[i-1][j].activo == false && mp[i-1][j].numero != 0 {
 							print("↑ ")
+							comer(mp, 2, i, j)
 						} else if mp[i][j-1].activo == false && mp[i][j-1].numero != 0 {
 							print("← ")
+							comer(mp, 4, i, j)
 						}
 					}
 				}
@@ -204,10 +258,13 @@ func buscar(mp [][]mapa) { // funcion para buscar donde comer
 					if j > 0 && j < len(mp)-1 {
 						if mp[i][j-1].activo == false && mp[i][j-1].numero != 0 {
 							print("←")
+							comer(mp, 4, i, j)
 						} else if mp[i+1][j].activo == false && mp[i+1][j].numero != 0 {
 							print("↓")
+							comer(mp, 3, i, j)
 						} else if mp[i][j+1].activo == false && mp[i][j+1].numero != 0 {
 							print("→")
+							comer(mp, 1, i, j)
 						}
 					}
 				}
@@ -215,10 +272,13 @@ func buscar(mp [][]mapa) { // funcion para buscar donde comer
 					if j < 0 && j < len(mp)-1 {
 						if mp[i][j-1].activo == false && mp[i][j-1].numero != 0 {
 							print("← ")
+							comer(mp, 4, i, j)
 						} else if mp[i-1][j].activo == false && mp[i-1][j].numero != 0 {
 							print("↑ ")
+							comer(mp, 2, i, j)
 						} else if mp[i][j+1].activo == false && mp[i][j+1].numero != 0 {
 							print("→ ")
+							comer(mp, 1, i, j)
 						}
 					}
 				}
@@ -226,18 +286,22 @@ func buscar(mp [][]mapa) { // funcion para buscar donde comer
 
 					if mp[i][j+1].activo == false && mp[i][j+1].numero != 0 { // come al lado izq
 						print("→ ", mp[i][j+1].numero)
+						comer(mp, 1, i, j)
 
 					} else if mp[i][j-1].activo == false && mp[i][j-1].numero != 0 {
 
 						print("← ", mp[i][j-1].numero)
+						comer(mp, 4, i, j)
 
 					} else if mp[i+1][j].activo == false && mp[i+1][j].numero != 0 {
 
 						print("↓ ", mp[i+1][j].numero)
+						comer(mp, 3, i, j)
 
 					} else if mp[i-1][j].activo == false && mp[i-1][j].numero != 0 { //arriba
 
 						print("↑ ", mp[i-1][j].numero)
+						comer(mp, 2, i, j)
 
 					} else {
 						print("no puede comer ")
@@ -265,5 +329,10 @@ func main() {
 	print("\n")
 	imprimir(mp)
 	buscar(mp)
+	imprimir(mp)
+	buscar(mp)
+	imprimir(mp)
+	buscar(mp)
+	imprimir(mp)
 
 }
