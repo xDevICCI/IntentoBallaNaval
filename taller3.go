@@ -20,6 +20,8 @@ type gusano struct {
 	comida     int   //cantidad de comida
 	cabeza     bool  //comienza en false // true para decir que es cabeza
 	fieldNext  *mapa //esta variable permitira ir restando ( comer) el valor de alimento y guardando
+	cuerpo     bool  // false si es cabeza true si es cuerpo
+	next       *gusano
 }
 
 type Color string
@@ -54,6 +56,9 @@ func crear_map(mp [][]mapa, cantidad_gusano int, comida int) {
 					mp[x+j][y].guzanito = iniciarlizar_gusano()
 					mp[x+j][y].guzanito.id = +i
 					mp[x+j][y].activo = true
+					if j > 0 {
+						mp[x+j][y].guzanito.cuerpo = true
+					}
 				}
 				mp[x][y].guzanito.cabeza = true
 			} else if mp[x][y+1].activo == false && mp[x][y+2].activo == false { //llene de forma horizontal
@@ -61,6 +66,9 @@ func crear_map(mp [][]mapa, cantidad_gusano int, comida int) {
 					mp[x][y+j].guzanito = iniciarlizar_gusano()
 					mp[x][y+j].guzanito.id = +i
 					mp[x][y+j].activo = true
+					if j > 0 {
+						mp[x+j][y].guzanito.cuerpo = true
+					}
 				}
 				mp[x][y].guzanito.cabeza = true
 			}
@@ -78,7 +86,9 @@ func crear_map(mp [][]mapa, cantidad_gusano int, comida int) {
 				mp[x][y+j].guzanito = iniciarlizar_gusano()
 				mp[x][y+j].guzanito.id = +i
 				mp[x][y+j].activo = true
-
+				if j > 0 {
+					mp[x+j][y].guzanito.cuerpo = true
+				}
 			}
 			mp[x][y].guzanito.cabeza = true
 		} else {
@@ -93,6 +103,20 @@ func crear_map(mp [][]mapa, cantidad_gusano int, comida int) {
 			}
 		}
 	}
+}
+func buscar_cuerpo(mp [][]mapa, id int) (int, int, int, int) {
+	var x []int
+	for i := 0; i < len(mp); i++ {
+		for j := 0; j < len(mp); j++ {
+			if mp[i][j].guzanito.id == id && mp[i][j].guzanito.cabeza == false { // si es cuerpo
+
+				x = append(x, i)
+				x = append(x, j)
+
+			}
+		}
+	}
+	return x[0], x[1], x[2], x[3]
 }
 
 func color(mp [][]mapa, i int, j int) { //funcion para pasar cambiar de color
@@ -131,6 +155,7 @@ func imprimir(mp [][]mapa) {
 }
 
 func comer(mp [][]mapa, numero int, i int, j int) {
+
 	switch numero {
 	case 1:
 		//J SE MUEVE HORIZONTAL
@@ -159,27 +184,33 @@ func comer(mp [][]mapa, numero int, i int, j int) {
 }
 
 func avanzar(mp [][]mapa, numero int, i int, j int) {
+	var aux mapa
 	switch numero {
 	case 1:
 		//ESTE ES PARA LA DERECHA
 		if mp[i][j].guzanito.fieldNext.numero == 0 {
 			mp[i][j+1] = mp[i][j]
+			mp[i][j] = aux
+
 		}
 	case 2:
-
 		//ESTE ES PARA ARRIBA
 		if mp[i][j].guzanito.fieldNext.numero == 0 {
 			mp[i-1][j] = mp[i][j]
+			mp[i][j] = aux
+
 		}
 	case 3:
 		//ESTE ES PARA ABAJO
 		if mp[i][j].guzanito.fieldNext.numero == 0 {
 			mp[i+1][j] = mp[i][j]
+			mp[i][j] = aux
 		}
 	case 4:
 		//ESTE ES PARA LA IZQUIERDA
 		if mp[i][j].guzanito.fieldNext.numero == 0 {
 			mp[i][j-1] = mp[i][j]
+			mp[i][j] = aux
 		}
 	}
 }
@@ -306,6 +337,8 @@ func buscar(mp [][]mapa) { // funcion para buscar donde comer
 					} else {
 						print("no puede comer ")
 					}
+				} else {
+					print("no hay mas camino")
 				}
 			}
 		}
@@ -327,12 +360,13 @@ func main() {
 
 	crear_map(mp, gusanos, comida)
 	print("\n")
-	imprimir(mp)
-	buscar(mp)
-	imprimir(mp)
-	buscar(mp)
-	imprimir(mp)
-	buscar(mp)
-	imprimir(mp)
+	for {
+		imprimir(mp)
+		buscar(mp)
+		time.Sleep(2 * time.Second)
+		if 1 == 0 {
+			break
+		}
+	}
 
 }
