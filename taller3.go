@@ -123,27 +123,62 @@ func buscar_cuerpo(mp [][]mapa, id int) (int, int, int, int) {
 
 func color(mp [][]mapa, i int, j int) { //funcion para pasar cambiar de color
 	if mp[i][j].guzanito.id == 0 {
-		print(ColorBlue, " ■ ")
+		if mp[i][j].guzanito.cabeza == true {
+			print(ColorBlue, " x ")
+		} else {
+			print(ColorBlue, " ■ ")
+		}
 	} else if mp[i][j].guzanito.id == 1 {
-		print(ColorYellow, " ■ ")
+		if mp[i][j].guzanito.cabeza == true {
+			print(ColorYellow, " x ")
+		} else {
+			print(ColorYellow, " ■ ")
+		}
+
 	} else if mp[i][j].guzanito.id == 2 {
-		print(ColorGreen, " ■ ")
+		if mp[i][j].guzanito.cabeza == true {
+			print(ColorGreen, " x ")
+		} else {
+			print(ColorGreen, " ■ ")
+		}
 	} else if mp[i][j].guzanito.id == 3 {
-		print(ColorRed, " ■ ")
+		if mp[i][j].guzanito.cabeza == true {
+			print(ColorRed, " x ")
+		} else {
+			print(ColorRed, " ■ ")
+		}
+
 	} else if mp[i][j].guzanito.id == 4 {
-		print(ColorYellow, " ■ ")
+		if mp[i][j].guzanito.cabeza == true {
+			print(ColorYellow, " x ")
+		} else {
+			print(ColorYellow, " ■ ")
+		}
 	} else if mp[i][j].guzanito.id == 5 {
-		print(Color1, " ■ ")
+		if mp[i][j].guzanito.cabeza == true {
+			print(Color1, " x ")
+		} else {
+			print(Color1, " ■ ")
+		}
 	} else if mp[i][j].guzanito.id == 0 {
-		print(Color2, " ■ ")
+		if mp[i][j].guzanito.cabeza == true {
+			print(Color2, " x ")
+		} else {
+			print(Color2, " ■ ")
+		}
 	} else {
 		print(" ■ ")
 	}
 }
 
 func imprimir(mp [][]mapa) {
+
+	print("\n\n º")
+	for k := 0; k < len(mp); k++ {
+		print("  ", k, "")
+	}
 	for i := 0; i < len(mp); i++ {
-		print("\n")
+		print("\n ", i, " ")
 		for j := 0; j < len(mp); j++ {
 			if mp[i][j].activo == true {
 				color(mp, i, j)
@@ -225,37 +260,37 @@ func avanzar(mp [][]mapa, numero int, i int, j int) {
 
 func buscar(mp [][]mapa) { // funcion para buscar donde comer
 
-	print("\n", len(mp))
+	print("\n")
 	for i := 0; i < len(mp); i++ {
 		for j := 0; j < len(mp); j++ {
 			if mp[i][j].guzanito.cabeza == true {
 				if j == 0 { //primera columna eje J
 					if i == 0 {
 						if mp[i][j+1].activo == false && mp[i][j+1].numero != 0 {
-							print("→ ")
+							println(" [", i, "][", j, "] → ")
 							comer(mp, 1, i, j)
 
 						} else if mp[i+1][j].activo == false && mp[i+1][j].numero != 0 {
-							print("↓ ")
+							println(" [", i, "][", j, "] ↓ ")
 							comer(mp, 3, i, j)
 						}
 					} else if 0 < i && i < len(mp)-1 {
 						if mp[i+1][j].activo == false && mp[i+1][j].numero != 0 {
-							print("↓ ")
+							println(" [", i, "][", j, "] ↓ ")
 							comer(mp, 3, i, j)
 						} else if mp[i][j+1].activo == false && mp[i][j+1].numero != 0 {
-							print("→ ")
+							println(" [", i, "][", j, "] → ")
 							comer(mp, 1, i, j)
 						} else if mp[i-1][j].activo == false && mp[i-1][j].numero != 0 {
-							print("↑ ")
+							println("[", i, "][", j, "] ↑ ")
 							comer(mp, 2, i, j)
 						}
 					} else if i == len(mp)-1 {
 						if mp[i][j+1].activo == false && mp[i][j+1].numero != 0 {
-							print("→ ")
+							println(" [", i, "][", j, "] → ")
 							comer(mp, 1, i, j)
 						} else if mp[i-1][j].activo == false && mp[i-1][j].numero != 0 {
-							print("↑ ")
+							println("[", i, "][", j, "] ↑ ")
 							comer(mp, 2, i, j)
 						}
 
@@ -264,30 +299,30 @@ func buscar(mp [][]mapa) { // funcion para buscar donde comer
 				if j == len(mp)-1 { // ultima columna eje J
 					if i == 0 {
 						if mp[i+1][j].activo == false && mp[i+1][j].numero != 0 {
-							print("↓ ")
+							println(" [", i, "][", j, "] ↓ ")
 							comer(mp, 3, i, j)
 						} else if mp[i][j-1].activo == false && mp[i][j-1].numero != 0 {
-							print("← ")
+							println("[", i, "][", j, "] ← ")
 							comer(mp, 4, i, j)
 						}
 					} else if i > 0 && i < len(mp)-1 {
 						if mp[i][j-1].activo == false && mp[i][j-1].numero != 0 {
-							print("← ")
+							println("[", i, "][", j, "] ← ")
 							comer(mp, 4, i, j)
 						} else if mp[i+1][j].activo == false && mp[i+1][j].numero != 0 {
-							print("↓ ")
+							println(" [", i, "][", j, "] ↓ ")
 							comer(mp, 3, i, j)
 						} else if mp[i-1][j].activo == false && mp[i-1][j].numero != 0 {
-							print("↑ ")
+							println("[", i, "][", j, "] ↑ ")
 							comer(mp, 2, i, j)
 						}
 
 					} else if i == len(mp)-1 {
 						if mp[i-1][j].activo == false && mp[i-1][j].numero != 0 {
-							print("↑ ")
+							println("[", i, "][", j, "] ↑ ")
 							comer(mp, 2, i, j)
 						} else if mp[i][j-1].activo == false && mp[i][j-1].numero != 0 {
-							print("← ")
+							println("[", i, "][", j, "] ← ")
 							comer(mp, 4, i, j)
 						}
 					}
@@ -295,13 +330,13 @@ func buscar(mp [][]mapa) { // funcion para buscar donde comer
 				if i == 0 { // primera fila eje i
 					if j > 0 && j < len(mp)-1 {
 						if mp[i][j-1].activo == false && mp[i][j-1].numero != 0 {
-							print("←")
+							println("[", i, "][", j, "] ← ")
 							comer(mp, 4, i, j)
 						} else if mp[i+1][j].activo == false && mp[i+1][j].numero != 0 {
-							print("↓")
+							println(" [", i, "][", j, "] ↓ ")
 							comer(mp, 3, i, j)
 						} else if mp[i][j+1].activo == false && mp[i][j+1].numero != 0 {
-							print("→")
+							println(" [", i, "][", j, "] → ")
 							comer(mp, 1, i, j)
 						}
 					}
@@ -309,13 +344,13 @@ func buscar(mp [][]mapa) { // funcion para buscar donde comer
 				if i == len(mp)-1 { //ultima fila eje i
 					if j < 0 && j < len(mp)-1 {
 						if mp[i][j-1].activo == false && mp[i][j-1].numero != 0 {
-							print("← ")
+							println("[", i, "][", j, "] ← ")
 							comer(mp, 4, i, j)
 						} else if mp[i-1][j].activo == false && mp[i-1][j].numero != 0 {
-							print("↑ ")
+							println("[", i, "][", j, "] ↑ ")
 							comer(mp, 2, i, j)
 						} else if mp[i][j+1].activo == false && mp[i][j+1].numero != 0 {
-							print("→ ")
+							println(" [", i, "][", j, "] → ")
 							comer(mp, 1, i, j)
 						}
 					}
@@ -323,36 +358,36 @@ func buscar(mp [][]mapa) { // funcion para buscar donde comer
 				if j > 0 && j < len(mp)-1 && i > 0 && i < len(mp)-1 { // dentro de la matriz
 
 					if mp[i][j+1].activo == false && mp[i][j+1].numero != 0 { // come al lado izq
-						print("→ ", mp[i][j+1].numero)
+						print(" [", i, "][", j, "] → ")
 						comer(mp, 1, i, j)
 
 					} else if mp[i][j-1].activo == false && mp[i][j-1].numero != 0 {
 
-						print("← ", mp[i][j-1].numero)
+						print("[", i, "][", j, "] ← ")
 						comer(mp, 4, i, j)
 
 					} else if mp[i+1][j].activo == false && mp[i+1][j].numero != 0 {
 
-						print("↓ ", mp[i+1][j].numero)
+						print(" [", i, "][", j, "] ↓ ")
 						comer(mp, 3, i, j)
 
 					} else if mp[i-1][j].activo == false && mp[i-1][j].numero != 0 { //arriba
 
-						print("↑ ", mp[i-1][j].numero)
+						print("[", i, "][", j, "] ↑ ")
 						comer(mp, 2, i, j)
 
 					} else {
-						print("no puede comer ")
+						print("")
 					}
 				} else {
-					print("no hay mas camino")
+					print("")
 				}
 			}
 		}
 	}
 }
 func main() {
-
+	//go run taller3.go 7 7 7 6
 	gusanos, _ := strconv.Atoi(os.Args[1])
 	x, _ := strconv.Atoi(os.Args[2])
 	y, _ := strconv.Atoi(os.Args[3])
@@ -364,7 +399,6 @@ func main() {
 	for i := 0; i < x; i++ {
 		mp[i] = make([]mapa, y)
 	}
-
 	crear_map(mp, gusanos, comida)
 	print("\n")
 	for {
@@ -375,5 +409,4 @@ func main() {
 			break
 		}
 	}
-
 }
