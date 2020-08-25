@@ -184,33 +184,32 @@ func comer(mp [][]mapa, numero int, i int, j int) {
 }
 
 func avanzar(mp [][]mapa, numero int, i int, j int) {
-	var aux mapa
 	switch numero {
 	case 1:
 		//ESTE ES PARA LA DERECHA
 		if mp[i][j].guzanito.fieldNext.numero == 0 {
 			mp[i][j+1] = mp[i][j]
-			mp[i][j] = aux
+			mp[i][j].guzanito.cabeza = false
 
 		}
 	case 2:
 		//ESTE ES PARA ARRIBA
 		if mp[i][j].guzanito.fieldNext.numero == 0 {
 			mp[i-1][j] = mp[i][j]
-			mp[i][j] = aux
+			mp[i][j].guzanito.cabeza = false
 
 		}
 	case 3:
 		//ESTE ES PARA ABAJO
 		if mp[i][j].guzanito.fieldNext.numero == 0 {
 			mp[i+1][j] = mp[i][j]
-			mp[i][j] = aux
+			mp[i][j].guzanito.cabeza = false
 		}
 	case 4:
 		//ESTE ES PARA LA IZQUIERDA
 		if mp[i][j].guzanito.fieldNext.numero == 0 {
 			mp[i][j-1] = mp[i][j]
-			mp[i][j] = aux
+			mp[i][j].guzanito.cabeza = false
 		}
 	}
 }
