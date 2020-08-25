@@ -4,6 +4,7 @@ import (
 	"math/rand"
 	"os"
 	"strconv"
+	"sync"
 	"time"
 )
 
@@ -11,6 +12,7 @@ type mapa struct {
 	guzanito gusano
 	numero   int  // dato para llenar alimento
 	activo   bool // true hay gusano // False no hay gusano
+	mux      sync.Mutex
 }
 
 type gusano struct {
@@ -155,31 +157,38 @@ func imprimir(mp [][]mapa) {
 }
 
 func comer(mp [][]mapa, numero int, i int, j int) {
-
+	var sem = make(chan int, 10)
 	switch numero {
 	case 1:
 		//J SE MUEVE HORIZONTAL
 		//I SE MUEVE VERTICAL
+		sem <- 1
 		mp[i][j].guzanito.fieldNext = &mp[i][j+1]
 		mp[i][j].guzanito.fieldNext.numero = mp[i][j].guzanito.fieldNext.numero - 1
 		mp[i][j+1].numero = mp[i][j].guzanito.fieldNext.numero
 		avanzar(mp, 1, i, j)
+		<-sem
 	case 2:
+		sem <- 1
 		mp[i][j].guzanito.fieldNext = &mp[i-1][j]
 		mp[i][j].guzanito.fieldNext.numero = mp[i][j].guzanito.fieldNext.numero - 1
 		mp[i-1][j].numero = mp[i][j].guzanito.fieldNext.numero
 		avanzar(mp, 2, i, j)
+		<-sem
 	case 3:
+		sem <- 1
 		mp[i][j].guzanito.fieldNext = &mp[i+1][j]
 		mp[i][j].guzanito.fieldNext.numero = mp[i][j].guzanito.fieldNext.numero - 1
 		mp[i+1][j].numero = mp[i][j].guzanito.fieldNext.numero
 		avanzar(mp, 3, i, j)
+		<-sem
 	case 4:
+		sem <- 1
 		mp[i][j].guzanito.fieldNext = &mp[i][j-1]
 		mp[i][j].guzanito.fieldNext.numero = mp[i][j].guzanito.fieldNext.numero - 1
 		mp[i][j-1].numero = mp[i][j].guzanito.fieldNext.numero
 		avanzar(mp, 4, i, j)
-
+		<-sem
 	}
 }
 
@@ -215,12 +224,11 @@ func avanzar(mp [][]mapa, numero int, i int, j int) {
 }
 
 func buscar(mp [][]mapa) { // funcion para buscar donde comer
-	print("\n", len(mp))
 
+	print("\n", len(mp))
 	for i := 0; i < len(mp); i++ {
 		for j := 0; j < len(mp); j++ {
 			if mp[i][j].guzanito.cabeza == true {
-				print("\n gusano cabeza en [", i, "],[", j, "]\n")
 				if j == 0 { //primera columna eje J
 					if i == 0 {
 						if mp[i][j+1].activo == false && mp[i][j+1].numero != 0 {
@@ -361,7 +369,7 @@ func main() {
 	print("\n")
 	for {
 		imprimir(mp)
-		buscar(mp)
+		go buscar(mp)
 		time.Sleep(2 * time.Second)
 		if 1 == 0 {
 			break
